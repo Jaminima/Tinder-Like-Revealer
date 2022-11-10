@@ -71,7 +71,7 @@ using (var webClient = new WebClient())
                     }
                 }
             }
-            Console.WriteLine("Waiting Before Repeating");
+            Console.WriteLine("Waiting 60 Seconds Before Repeating");
             Thread.Sleep(60000);
         }
     }
