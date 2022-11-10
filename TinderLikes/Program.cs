@@ -23,6 +23,8 @@ if (token.Length == 0)
 
 if (!Directory.Exists("likes")) Directory.CreateDirectory("likes");
 
+List<string> consoleBody = new List<string>();
+
 using (var webClient = new WebClient())
 {
     using (var httpClient = new HttpClient())
@@ -31,8 +33,6 @@ using (var webClient = new WebClient())
         {
             using (var request = new HttpRequestMessage(new HttpMethod("GET"), "https://api.gotinder.com/v2/fast-match/teasers?locale=en-GB"))
             {
-                Console.WriteLine("Finding Likes");
-
                 request.Headers.TryAddWithoutValidation("platform", "android");
                 request.Headers.TryAddWithoutValidation("x-auth-token", token);
 
@@ -64,18 +64,29 @@ using (var webClient = new WebClient())
 
                     var photoUrl = photos.First().GetProperty("url").GetString();
 
-                    var fileName = userId + ".jpeg";
-                    var filePath = "./likes/" + fileName;
+                    var filePath = "./likes/" + userId + ".jpeg";
 
                     if (!File.Exists(filePath))
                     {
-                        Console.WriteLine("Downloading " + fileName);
+                        consoleBody.Add("Found Like With Id " + userId);
                         await webClient.DownloadFileTaskAsync(new Uri(photoUrl), filePath);
                     }
                 }
             }
-            Console.WriteLine("Waiting 60 Seconds Before Repeating");
-            Thread.Sleep(60000);
+
+            string consoleOut = String.Join('\n', consoleBody) + (consoleBody.Count > 0 ? "\n" : "") + "Likes Found: " + consoleBody.Count;
+            string dotsString = "";
+
+            const int dotsLim = 4;
+
+            for (int i = 0; i < 30; i++)
+            {
+                dotsString = dotsString.Length > dotsLim ? "." : dotsString + ".";
+
+                Console.Clear();
+                Console.WriteLine(consoleOut + dotsString);
+                Thread.Sleep(2000);
+            }
         }
     }
 }
