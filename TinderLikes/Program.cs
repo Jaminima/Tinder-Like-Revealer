@@ -8,6 +8,7 @@ if (!File.Exists(tokenFile))
 {
     File.Create(tokenFile);
     Console.WriteLine("Please Paste Your Token Into " + tokenFile);
+    Console.ReadLine();
     return;
 }
 
@@ -16,6 +17,7 @@ string token = File.ReadAllText(tokenFile);
 if (token.Length == 0)
 {
     Console.WriteLine("Please Correct Your Token In " + tokenFile);
+    Console.ReadLine();
     return;
 }
 
@@ -39,6 +41,7 @@ using (var webClient = new WebClient())
                 if (!response.IsSuccessStatusCode)
                 {
                     Console.WriteLine("Your Token Is Likely Invalid, Please Update It In " + tokenFile);
+                    Console.ReadLine();
                     return;
                 }
 
